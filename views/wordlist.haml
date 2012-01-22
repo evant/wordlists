@@ -1,0 +1,10 @@
+%body
+  %h1=@category.name
+  %table
+    %tr
+      %th votes
+      %th words
+    -@category.words.each do |word|
+      %tr
+      %td=word.votes
+      %td=word

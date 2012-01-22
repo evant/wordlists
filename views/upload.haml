@@ -1,0 +1,25 @@
+%body
+  %h1 Upload Words
+  %p
+    You can upload words and phrases to relevant lists by typing them below or uploading a text file.
+    Don't worry if your words are already in the list; if it is it will be 'upvoted'.
+  %form{method: 'post'}
+    %p
+      %label{:for => 'words'} Type words or phrases here separated by commas or newlines. 
+      %br
+      %textarea{name: 'words', cols: 60, rows: 10}
+    %p
+      %label{:for => 'words'} Or you can upload a file with one word or phrase per line.
+      %br
+      %input{type: 'file'}
+    %p
+      %label{:for => 'category'} Now choose a category for your words.
+      %br
+      %select{name: 'category'}
+        -@categories.each do |category|
+          %option{value: category.name}=category.name
+      %p
+        Don't see the proper category? You can vote to include it
+        %a{href: url('/category_vote')} here.
+    %p
+      %input{type: 'submit', value: 'Upload'}
