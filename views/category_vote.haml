@@ -1,0 +1,13 @@
+%body
+  %h1 Category Vote
+  %form{method: 'post'}
+    %input{type: 'textbox', name: 'category'}
+    %input{type: 'submit', value: 'Suggest Category'}
+  %table
+    %tr
+      %th votes
+      %th categories
+    -@categories.each do |category|
+      %tr
+      %td=category.votes
+      %td=h category

@@ -1,9 +1,15 @@
 %body
   %h1 Upload Words
+  -if @flash
+    %p 
+      You uploaded
+      =@word_count
+      words to
+      %a{href: url("/word_lists/view/#{h_uri(@category)}")}= @category
   %p
     You can upload words and phrases to relevant lists by typing them below or uploading a text file.
     Don't worry if your words are already in the list; if it is it will be 'upvoted'.
-  %form{method: 'post'}
+  %form{method: 'post', enctype: 'multipart/form-data'}
     %p
       %label{:for => 'words'} Type words or phrases here separated by commas or newlines. 
       %br
@@ -11,13 +17,13 @@
     %p
       %label{:for => 'words'} Or you can upload a file with one word or phrase per line.
       %br
-      %input{type: 'file'}
+      %input{type: 'file', name: 'file'}
     %p
       %label{:for => 'category'} Now choose a category for your words.
       %br
       %select{name: 'category'}
         -@categories.each do |category|
-          %option{value: category.name}=category.name
+          %option{value: category}=category
       %p
         Don't see the proper category? You can vote to include it
         %a{href: url('/category_vote')} here.

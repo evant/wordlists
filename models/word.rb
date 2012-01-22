@@ -1,13 +1,13 @@
+require_relative 'voteable'
+
 class Word
   include DataMapper::Resource
 
   property :id, Serial
-  property :name, String, :required => true, :accessor => :private
-  property :votes, Integer, :default => 0, :writer => :private
+  property :name, String, :required => true
 
-  def add_vote
-    votes += 1
-  end
+  include Voteable
+  belongs_to :category
 
   def to_s
     name

@@ -7,30 +7,77 @@ heroku = !!ENV['HEROKU_TYPE']
 Database.set(heroku ? :production : :development)
 
 class WordLists < Sinatra::Base
+  helpers do
+    def h_uri(str)
+      URI.escape(str.to_s, '/?&;')
+    end 
+
+    def h(str)
+      escape_html(str.to_s)
+    end
+  end
+
   get '/' do
     haml :index
   end
 
   get '/upload' do
-    @categories = Category.all
+    @categories = Category.confirmed
 
     haml :upload
   end
 
-  get '/wordlists' do
-    @categories = Category.all
+  post '/upload' do
+    @categories = Category.confirmed
 
-    haml :wordlists
+    input = ""
+    input << params[:file][:tempfile].read if params[:file]
+    input << params[:words] if params[:words]
+
+    words = words_from_string(input)
+
+    @category = Category.first(:name => params[:category])    
+    @category.add_words(words_from_string(input))
+
+    @word_count = words.size
+    @flash = true
+
+    haml :upload
   end
 
-  get '/wordlists/view/:category_name' do |category_name|
-    @category = Category.find(name: category_name)
+  def words_from_string(input)
+    input.split(/[,\n]/).map(&:strip).reject(&:empty?)
+  end
+
+  get '/category_vote' do
+    @categories = Category.suggested
+
+    haml :category_vote
+  end
+
+  post '/category_vote' do
+    @category = Category.first_or_new(:name => params[:category])  
+    @category.add_vote
     
-    haml :wordlist
+    put "Unable to save: #{@category}" unless @category.save
+
+    redirect url('/category_vote')
   end
 
-  get '/wordlists/download/:category_name' do |category_name|
-    @category = Category.find(name: category_name)
+  get '/word_lists' do
+    @categories = Category.confirmed
+
+    haml :word_lists
+  end
+
+  get '/word_lists/view/:category_name' do |category_name|
+    @category = Category.first(:name => category_name)
+    
+    haml :word_list
+  end
+
+  get '/word_lists/download/:category_name' do |category_name|
+    @category = Category.first(:name => category_name)
 
     content_type :text
     @category.words.join("\n")

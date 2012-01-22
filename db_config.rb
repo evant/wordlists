@@ -1,20 +1,18 @@
 require 'data_mapper'
 
 module Database
-  @env = :production
-
   def self.set env
     database env
     load_models
     DataMapper.finalize
 
-    if @env == :test
+    if env == :test
       DataMapper.auto_migrate!
     else
       DataMapper.auto_upgrade!
     end
 
-    if @env == :development
+    if env == :development
       DataMapper::Logger.new($stdout, :debug)
     end
   end

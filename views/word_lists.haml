@@ -1,0 +1,7 @@
+%body
+  %h1 Word Lists
+  -@categories.each do |category|
+    =h category
+    %a{href: url("/word_lists/view/#{h_uri(category)}")} view
+    %a{href: url("/word_lists/download/#{h_uri(category)}")} download
+    %br

@@ -1,0 +1,12 @@
+%body
+  %h1=h @category
+  %p
+    %a{href: url("/word_lists/download/#{h_uri(@category)}")} download
+  %table
+    %tr
+      %th votes
+      %th words
+    -@category.words.each do |word|
+      %tr
+        %td=word.votes
+        %td=h word
