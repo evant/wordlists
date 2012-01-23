@@ -2,8 +2,10 @@
 $background: white;
 $header_background: #A5E3E2;
 $footer_background: #A5E3E2;
+
 $table_background: #eee;
 $table_border_background: #aaa;
+
 $note_background: #A5E3E2;
 $flash_background: #A5E3AC;
 $error_background: #E3A5A7;
@@ -98,6 +100,7 @@ footer {
     label {
       color: #555;
     }
+    padding: { bottom: 10px; }
   }
 
   .note {
@@ -128,14 +131,24 @@ footer {
       background-color: $table_background;
     }
 
-    td {
+    tr:nth-child(even) {
+      background-color: $background;
+    }
+
+    td, th {
       padding: { top: 5px; bottom: 5px; right: 20px; left: 20px; }
     }
 
-    td:nth-child(1), th:nth-child(1) {
+    td:nth-child(1) {
       text-align: center;
       border: { right: 3px solid $table_border_background; }
     }
+
+    th {
+      text-align: center;
+      background-color: $table_border_background;
+    }
+
   }
 
   table#word-lists {
