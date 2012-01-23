@@ -8,6 +8,7 @@ module Voteable
 
   def add_vote
     self.votes += 1
+    save
   end
 
   module ClassMethods

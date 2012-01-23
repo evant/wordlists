@@ -1,10 +1,41 @@
+//colors
+$background: white;
+$header_background: #A5E3E2;
+$footer_background: #A5E3E2;
+$table_background: #eee;
+$table_border_background: #aaa;
+$note_background: #A5E3E2;
+$flash_background: #A5E3AC;
+$error_background: #E3A5A7;
+
+//values
+$footer_height: 142px;
+$negative_footer_height: -142px;
+
 * {
   margin: 0;
   font-family: Helvetica, sans;
 }
 
+//Sticky footer
+html, body {
+  height: 100%;
+  background-color: $background;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto $negative_footer_height;
+}
+
+footer, .push {
+  height: $footer_height
+}
+
 header {
-  background-color: #ccc;
+  background-color: $header_background;
   height: 60px;
 
   a {
@@ -14,7 +45,7 @@ header {
 
   #logo {
     float: left;
-    margin: { top: 12px; left: 20px; }
+    padding: { top: 12px; left: 20px; }
 
     h1 {
       font-family: DejaVu, sans;
@@ -23,7 +54,7 @@ header {
 
   #nav {
     float: right;
-    margin: { top: 30px; left: 20px; right: 40px; }
+    padding: { top: 30px; left: 20px; right: 40px; }
 
     li {
       display: inline;
@@ -34,18 +65,22 @@ header {
       }
 
       a.current {
-        background-color: white;
+        background-color: $background;
       }
 
       a:hover {
-        background-color: white;
+        background-color: $background;
       }
     }
   }
 }
 
+footer {
+  background-color: $footer_background;
+}
+
 #content {
-  margin: { left: 20px; right: 20px; top: 20px; bottom: 20px; }
+  padding: { left: 20px; right: 20px; top: 20px; bottom: 20px; }
 
   h1 {
     font-size: 1.8em;
@@ -53,7 +88,7 @@ header {
 
   p {
     font-size: 1.1em;
-    margin: { bottom: 10px; }
+    padding: { bottom: 10px; }
   }
 
   form {
@@ -64,30 +99,30 @@ header {
 
   .note {
     font-size: 0.9em;
-    color: #444;
-    background-color: #eee;
+    background-color: $note_background;
     padding: { left: 5px; right: 5px; top: 2px; bottom: 2px; }
     margin: { left: 5px; }
   }
 
   .flash {
     font-size: 1.2em;
-    background-color: #A5E3AC;
+    background-color: $flash_background;
     padding: { left: 5px; right: 5px; top: 2px; bottom: 2px; }
   }
 
   .error {
     font-size: 1.2em;
-    background-color: #E3A5A7;
+    background-color: $error_background;
     padding: { left: 5px; right: 5px; top: 2px; bottom: 2px; }
   }
 
   table {
     border-collapse: collapse;
     width: 100%;
+    max-width: 1000px;
 
     tr:nth-child(odd) {
-      background-color: #eee;
+      background-color: $table_background;
     }
 
     td {
@@ -96,7 +131,7 @@ header {
 
     td:nth-child(1), th:nth-child(1) {
       text-align: center;
-      border: { right: 3px solid #aaa; }
+      border: { right: 3px solid $table_border_background; }
     }
   }
 

@@ -1,17 +1,18 @@
 %h1=h @category
 %p
   %a{href: url("/word_lists/download/#{h_uri(@category)}")} download
--if @category.words.size > 0
+  -if @words.empty?
+    %span.note
+      There doesn't seem to be any words. You should
+      %a{href: url("/upload")} upload
+      some words for this category.
+-if @words.size > 0
   %table
     %tr
       %th votes
       %th words
-    -@category.words.each do |word|
+    -@words.each do |word|
       %tr
         %td=word.votes
         %td=h word                                   
--else
-  %span.note
-    There doesn't seem to be any words. You should
-    %a{href: url("/upload")} upload
-    some words for this category.
+  =@words.pager.html.links_full(@page) { |page| url("/word_lists/view/#{h_uri(@category)}?page=#{page}") }

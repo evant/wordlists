@@ -19,8 +19,12 @@ class Category
     self.save
   end
 
+  def show_words
+    words.all(:order => [:votes.desc, :name.asc])
+  end
+
   def download_words
-    words.confirmed.join("\n")
+    words.confirmed.all(:order => [:name.asc]).join("\n")
   end
 
   def to_s

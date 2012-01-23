@@ -1,11 +1,11 @@
 %h1 Upload Words
--if flash
+-if @flash
   %p.flash
     You uploaded
     =@word_count
     words to
     %a{href: url("/word_lists/view/#{h_uri(@category)}")}= @category
--if error
+-if @error
   %p.error
     You didn't add any words.
 %p

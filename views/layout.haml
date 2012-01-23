@@ -2,6 +2,9 @@
   %title Word Lists
   %link{rel: 'stylesheet', href: url('/style.css')}
 %body
-  =haml :header
-  #content
-    =yield
+  .wrapper
+    =haml :header
+    #content
+      =yield
+    .push
+  =haml :footer
