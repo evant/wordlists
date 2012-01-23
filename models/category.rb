@@ -4,7 +4,7 @@ class Category
   include DataMapper::Resource
   include Voteable
 
-  vote_threashold = 0
+  vote_threashold 20
 
   property :id, Serial
   property :name, String, :required => true

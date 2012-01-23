@@ -14,8 +14,12 @@ module Voteable
   module ClassMethods
     attr_writer :vote_threashold
 
-    def vote_threashold
-      @vote_threashold ||= 0
+    def vote_threashold(value=nil)
+      if value.nil?
+        @vote_threashold ||= 0
+      else
+        @vote_threashold = value
+      end
     end
 
     def confirmed
