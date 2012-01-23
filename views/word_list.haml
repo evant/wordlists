@@ -1,6 +1,6 @@
 %h1=h @category
 %p
-  %a{href: url("/word_lists/download/#{h_uri(@category)}")} download
+  %a{href: url("/download/#{h_uri(@category)}")} download
   -if @words.empty?
     %span.note
       There doesn't seem to be any words. You should
@@ -15,4 +15,4 @@
       %tr
         %td=word.votes
         %td=h word                                   
-  =@words.pager.html.links_full(@page) { |page| url("/word_lists/view/#{h_uri(@category)}?page=#{page}") }
+  =@words.pager.html.links_full(@page) { |page| url("/view/#{h_uri(@category)}?page=#{page}") }

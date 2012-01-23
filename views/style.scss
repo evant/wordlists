@@ -9,8 +9,9 @@ $flash_background: #A5E3AC;
 $error_background: #E3A5A7;
 
 //values
-$footer_height: 142px;
-$negative_footer_height: -142px;
+$footer_height: 25px;
+$footer_padding: 10px;
+$negative_footer_height: -35px; //padding - height
 
 * {
   margin: 0;
@@ -77,6 +78,8 @@ header {
 
 footer {
   background-color: $footer_background;
+  font-size: 0.8em;
+  padding: { left: 20px; top: $footer_padding; }
 }
 
 #content {

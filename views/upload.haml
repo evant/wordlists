@@ -4,7 +4,7 @@
     You uploaded
     =@word_count
     words to
-    %a{href: url("/word_lists/view/#{h_uri(@category)}")}= @category
+    %a{href: url("/view/#{h_uri(@category)}")}= @category
 -if @error
   %p.error
     You didn't add any words.

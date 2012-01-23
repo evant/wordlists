@@ -36,8 +36,8 @@ class WordLists < Sinatra::Base
     @path = request.path_info
   end
 
-  get '/' do
-    haml :index
+  get '/about' do
+    haml :about
   end
 
   get('/:style.css') { |style| scss style.to_sym }
@@ -89,13 +89,13 @@ class WordLists < Sinatra::Base
     redirect url('/category_vote')
   end
 
-  get '/word_lists' do
+  get '/' do
     @categories = Category.confirmed
 
     haml :word_lists
   end
 
-  get '/word_lists/view/:category_name' do |category_name|
+  get '/view/:category_name' do |category_name|
     @category = Category.first(:name => category_name)
     @page = params[:page].to_i
     @words = @category.show_words.pagify(:page => @page, :per_page => 50)
@@ -103,7 +103,7 @@ class WordLists < Sinatra::Base
     haml :word_list
   end
 
-  get '/word_lists/download/:category_name' do |category_name|
+  get '/download/:category_name' do |category_name|
     @category = Category.first(:name => category_name)
 
     content_type :text
