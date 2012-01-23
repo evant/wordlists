@@ -1,7 +1,9 @@
-%body
-  %h1 Word Lists
+%h1 Word Lists
+%table{id: 'word-lists'}
   -@categories.each do |category|
-    =h category
-    %a{href: url("/word_lists/view/#{h_uri(category)}")} view
-    %a{href: url("/word_lists/download/#{h_uri(category)}")} download
-    %br
+    %tr
+      %td=h category
+      %td
+        %a{href: url("/word_lists/view/#{h_uri(category)}")} view
+      %td
+        %a{href: url("/word_lists/download/#{h_uri(category)}")} download

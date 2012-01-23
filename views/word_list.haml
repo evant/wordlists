@@ -1,7 +1,7 @@
-%body
-  %h1=h @category
-  %p
-    %a{href: url("/word_lists/download/#{h_uri(@category)}")} download
+%h1=h @category
+%p
+  %a{href: url("/word_lists/download/#{h_uri(@category)}")} download
+-if @category.words.size > 0
   %table
     %tr
       %th votes
@@ -9,4 +9,9 @@
     -@category.words.each do |word|
       %tr
         %td=word.votes
-        %td=h word
+        %td=h word                                   
+-else
+  %span.note
+    There doesn't seem to be any words. You should
+    %a{href: url("/upload")} upload
+    some words for this category.

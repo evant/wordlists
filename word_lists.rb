@@ -1,5 +1,6 @@
 require 'sinatra/base' 
 require 'haml'
+require 'sass'
 
 #set up database
 require_relative 'db_config'
@@ -8,6 +9,8 @@ Database.set(heroku ? :production : :development)
 
 class WordLists < Sinatra::Base
   helpers do
+    attr_accessor :flash, :error
+
     def h_uri(str)
       URI.escape(str.to_s, '/?&;')
     end 
@@ -15,11 +18,26 @@ class WordLists < Sinatra::Base
     def h(str)
       escape_html(str.to_s)
     end
+
+    def nav_link(path)
+      {href: url(path), :class => ('current' if @page == path)}
+    end
+  end
+
+  before do
+    @page = request.path_info
+  end
+
+  after do
+    flash = false
+    error = false
   end
 
   get '/' do
     haml :index
   end
+
+  get('/:style.css') { |style| scss style.to_sym }
 
   get '/upload' do
     @categories = Category.confirmed
@@ -80,6 +98,6 @@ class WordLists < Sinatra::Base
     @category = Category.first(:name => category_name)
 
     content_type :text
-    @category.words.join("\n")
+    @category.download_words
   end
 end

@@ -3,11 +3,15 @@
   %form{method: 'post'}
     %input{type: 'textbox', name: 'category'}
     %input{type: 'submit', value: 'Suggest Category'}
-  %table
-    %tr
-      %th votes
-      %th categories
-    -@categories.each do |category|
+      -if @categories.empty?
+        %span.note
+          There doesn't seem to be any suggested categories. Please suggest one.
+  -if @categories.size > 0
+    %table
       %tr
-      %td=category.votes
-      %td=h category
+        %th votes
+        %th categories
+      -@categories.each do |category|
+        %tr
+        %td=category.votes
+        %td=h category
