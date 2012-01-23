@@ -1,17 +1,23 @@
-%body
-  %h1 Category Vote
-  %form{method: 'post'}
-    %input{type: 'textbox', name: 'category'}
-    %input{type: 'submit', value: 'Suggest Category'}
+-if @error
+  %p.error
+    The category
+    = @category
+    already exists
+%form{method: 'post'}
+  %input{type: 'textbox', name: 'category'}
+  %input{type: 'submit', value: 'Suggest Category'}
+    %span.note
       -if @categories.empty?
-        %span.note
-          There doesn't seem to be any suggested categories. Please suggest one.
-  -if @categories.size > 0
-    %table
+        There doesn't seem to be any suggested categories. Please suggest one.
+      -else
+        = category_threashold
+        votes to add
+-if @categories.size > 0
+  %table
+    %tr
+      %th votes
+      %th categories
+    -@categories.each do |category|
       %tr
-        %th votes
-        %th categories
-      -@categories.each do |category|
-        %tr
-          %td=category.votes
-          %td=h category
+        %td=category.votes
+        %td=h category

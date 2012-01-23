@@ -9,6 +9,7 @@ class Word
   property :id, Serial
   property :name, String, :required => true
 
+  belongs_to :user
   belongs_to :category
 
   def to_s

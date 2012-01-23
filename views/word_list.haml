@@ -1,11 +1,14 @@
-%h1=h @category
+%h1=h "#{@category} (#{@words.size} word#{"s" if @words.size > 1})"
 %p
   %a{href: url("/download/#{h_uri(@category)}")} download
-  -if @words.empty?
-    %span.note
+  %span.note
+    -if @words.empty?
       There doesn't seem to be any words. You should
       %a{href: url("/upload")} upload
       some words for this category.
+    -else
+      =word_threashold
+      votes to add
 -if @words.size > 0
   %table
     %tr

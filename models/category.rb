@@ -9,6 +9,7 @@ class Category
   property :id, Serial
   property :name, String, :required => true
   
+  belongs_to :user
   has n, :words
 
   def add_words(words)
@@ -17,6 +18,11 @@ class Category
       word.add_vote
     end
     self.save
+  end
+
+  def add_word(name)
+    word = self.words.first_or_new(:name => name)
+    word.add_vote
   end
 
   def show_words

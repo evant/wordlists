@@ -30,6 +30,14 @@ class WordLists < Sinatra::Base
     def nav_link(path)
       {href: url(path), :class => ('current' if @path == path)}
     end
+
+    def category_threashold
+      Category.vote_threashold
+    end
+
+    def word_threashold
+      Word.vote_threashold
+    end
   end
 
   before do
@@ -58,12 +66,26 @@ class WordLists < Sinatra::Base
     if input.empty?
       @error = true
     else
-      words = words_from_string(input)
 
+      @words = words_from_string(input)
       @category = Category.first(:name => params[:category])    
-      @category.add_words(words_from_string(input))
 
-      @word_count = words.size
+      @user = if cookie[:user]
+                User.first(:id => cookie[:user].to_i)
+              else
+                User.new
+              end
+
+      @words.each do |word|
+        unless @user.words.include? word
+          @category.add_word(word)
+          @user.words << word
+        end
+      end
+
+      @user.save
+      @category.save
+
       @flash = true
     end
 
@@ -81,12 +103,19 @@ class WordLists < Sinatra::Base
   end
 
   post '/category_vote' do
-    @category = Category.first_or_new(:name => params[:category])  
-    @category.add_vote
-    
-    put "Unable to save: #{@category}" unless @category.save
+    @categories = Category.suggested
 
-    redirect url('/category_vote')
+    @category = Category.first_or_new(:name => params[:category])  
+
+    if Category.confirmed.include? @category
+      @error = true
+    else
+      @category.add_vote
+    end
+    
+    @category.save
+
+    haml :category_vote
   end
 
   get '/' do
