@@ -2,13 +2,12 @@ module Voteable
   def self.included(base)
     base.extend ClassMethods
     base.class_eval do
-      property :votes, Integer, :default => 0, :writer => :protected
+      property :votes, Integer, :default => 0
     end
   end
 
   def add_vote
     self.votes += 1
-    save
   end
 
   module ClassMethods

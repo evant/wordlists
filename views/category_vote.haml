@@ -1,8 +1,4 @@
--if @error
-  %p.error
-    The category
-    = @category
-    already exists
+= flash(@flash)
 %form{method: 'post'}
   %input{type: 'textbox', name: 'category'}
   %input{type: 'submit', value: 'Suggest Category'}

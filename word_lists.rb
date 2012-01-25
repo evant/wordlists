@@ -1,4 +1,5 @@
 require 'sinatra/base' 
+require 'sinatra/cookies'
 require 'haml'
 require 'sass'
 require 'pagify/data_mapper'
@@ -15,7 +16,11 @@ class Object
   end
 end
 
+require_relative 'presenters/categories_presenter'
+
 class WordLists < Sinatra::Base
+  helpers Sinatra::Cookies
+
   helpers do
     require 'pagify/helper/html'
 
@@ -25,6 +30,10 @@ class WordLists < Sinatra::Base
 
     def h(str)
       escape_html(str.to_s)
+    end
+
+    def flash(name)
+      haml "flash/#{name}".to_sym if name
     end
 
     def nav_link(path)
@@ -64,29 +73,24 @@ class WordLists < Sinatra::Base
     input << params[:words] if params[:words]
 
     if input.empty?
-      @error = true
+      @flash = :upload_empty
     else
 
-      @words = words_from_string(input)
-      @category = Category.first(:name => params[:category])    
+      @category = Category.confirmed.first(:name => params[:category])    
 
-      @user = if cookie[:user]
-                User.first(:id => cookie[:user].to_i)
-              else
-                User.new
-              end
+      user = User.from_cookie_or_ip(cookies, request.ip)
+      submission = Submission.new(words_from_string(input))
 
-      @words.each do |word|
-        unless @user.words.include? word
-          @category.add_word(word)
-          @user.words << word
-        end
+      if submission.submit_new_words_to(@category, :by => user)
+        @word_count = submission.new_word_count
+        @flash = if @word_count == 0
+                   :upload_no_new_words
+                 else
+                   :upload_sucess
+                 end
+      else
+        @flash = :upload_error
       end
-
-      @user.save
-      @category.save
-
-      @flash = true
     end
 
     haml :upload
@@ -103,17 +107,26 @@ class WordLists < Sinatra::Base
   end
 
   post '/category_vote' do
+
     @categories = Category.suggested
 
-    @category = Category.first_or_new(:name => params[:category])  
-
-    if Category.confirmed.include? @category
-      @error = true
+    category_name = (params[:category] || '').strip
+    if category_name.empty?
+      @flash = :category_empty
     else
-      @category.add_vote
+      if Category.confirmed.count(:name => category_name) > 0 
+        @flash = :category_already_exists
+      else
+        @category = Category.first_or_new(:name => category_name)  
+        @category.add_vote
+
+        if @category.save
+          @flash = :category_added
+        else
+          @flash = :category_error
+        end
+      end
     end
-    
-    @category.save
 
     haml :category_vote
   end
@@ -127,7 +140,7 @@ class WordLists < Sinatra::Base
   get '/view/:category_name' do |category_name|
     @category = Category.first(:name => category_name)
     @page = params[:page].to_i
-    @words = @category.show_words.pagify(:page => @page, :per_page => 50)
+    @words = @category.words.all(:order => [:name.asc]).pagify(:page => @page, :per_page => 50)
     
     haml :word_list
   end
@@ -136,6 +149,6 @@ class WordLists < Sinatra::Base
     @category = Category.first(:name => category_name)
 
     content_type :text
-    @category.download_words
+    CategoriesPresenter.new(Category).text
   end
 end

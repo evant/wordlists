@@ -1,0 +1,5 @@
+%p.flash
+  You uploaded
+  = "#{@word_count} word#{"s" if @word_count != 1}"
+  to
+  %a{href: url("/view/#{h_uri(@category)}?page=1")}= @category

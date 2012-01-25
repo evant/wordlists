@@ -1,12 +1,4 @@
--if @flash
-  %p.flash
-    You uploaded
-    =@word_count
-    words to
-    %a{href: url("/view/#{h_uri(@category)}")}= @category
--if @error
-  %p.error
-    You didn't add any words.
+= flash(@flash)
 %p
   You can upload words and phrases to relevant lists by typing them below or uploading a text file.
   Don't worry if your words are already in the list; if it is it will be 'upvoted'.

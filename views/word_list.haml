@@ -1,4 +1,4 @@
-%h1=h "#{@category} (#{@words.size} word#{"s" if @words.size > 1})"
+%h1=h "#{@category} (#{@words.size} word#{"s" if @words.size != 1})"
 %p
   %a{href: url("/download/#{h_uri(@category)}")} download
   %span.note

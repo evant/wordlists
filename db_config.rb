@@ -2,6 +2,11 @@ require 'data_mapper'
 
 module Database
   def self.set env
+    if env == :development
+      DataMapper::Logger.new($stdout, :debug)
+      DataMapper::Model.raise_on_save_failure = true
+    end
+
     database env
     load_models
     DataMapper.finalize
@@ -10,10 +15,6 @@ module Database
       DataMapper.auto_migrate!
     else
       DataMapper.auto_upgrade!
-    end
-
-    if env == :development
-      DataMapper::Logger.new($stdout, :debug)
     end
   end
 
