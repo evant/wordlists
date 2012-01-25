@@ -6,6 +6,7 @@ class Category
   property :name, String, :required => true
   
   has n, :words
+  has n, :users, :through => Resource
 
   include Voteable
   vote_threashold 20

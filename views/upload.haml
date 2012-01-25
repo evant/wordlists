@@ -1,4 +1,6 @@
 = flash(@flash)
+%p.flash{id: 'uploading'}
+  Uploading words...
 %p
   You can upload words and phrases to relevant lists by typing them below or uploading a text file.
   Don't worry if your words are already in the list; if it is it will be 'upvoted'.
@@ -22,4 +24,9 @@
       %a{href: url('/category_vote')} vote
       to include it.
   %p
-    %input{type: 'submit', value: 'Upload'}
+    %input{type: 'submit', value: 'Upload', on_click: 'submit();', id: 'submit'}
+
+:javascript
+  function submit() {
+    uploading = document.getElementById('uploading').style.display = 'block';
+  }

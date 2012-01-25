@@ -111,19 +111,27 @@ class WordLists < Sinatra::Base
     @categories = Category.suggested
 
     category_name = (params[:category] || '').strip
+
     if category_name.empty?
       @flash = :category_empty
     else
+      @category = Category.first_or_new(:name => category_name)  
       if Category.confirmed.count(:name => category_name) > 0 
         @flash = :category_already_exists
       else
-        @category = Category.first_or_new(:name => category_name)  
-        @category.add_vote
+        user = User.from_cookie_or_ip(cookies, request.ip)
 
-        if @category.save
-          @flash = :category_added
+        if CategoryUser.count(:category => @category, :user => user) > 0
+          @flash = :category_already_submitted
         else
-          @flash = :category_error
+          @category.users << user
+          @category.add_vote
+
+          if @category.save
+            @flash = :category_added
+          else
+            @flash = :category_error
+          end
         end
       end
     end
@@ -140,7 +148,7 @@ class WordLists < Sinatra::Base
   get '/view/:category_name' do |category_name|
     @category = Category.first(:name => category_name)
     @page = params[:page].to_i
-    @words = @category.words.all(:order => [:name.asc]).pagify(:page => @page, :per_page => 50)
+    @words = @category.words.all(:order => [:votes.desc, :name.asc]).pagify(:page => @page, :per_page => 50)
     
     haml :word_list
   end

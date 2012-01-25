@@ -4,6 +4,6 @@ class CategoriesPresenter
   end
 
   def text
-    @categories.confirmed.words.all(:order => [:votes.desc, :name.asc]).join("\n")
+    @categories.confirmed.words.confirmed.all(:order => [:name.asc]).join("\n")
   end
 end
