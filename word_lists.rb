@@ -143,7 +143,7 @@ class WordLists < Sinatra::Base
   end
 
   get '/' do
-    @categories = Category.confirmed
+    @categories = Category.confirmed.all(:order => [:name.asc])
 
     haml :word_lists
   end
