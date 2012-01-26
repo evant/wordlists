@@ -1,15 +1,17 @@
-%h1=h "#{@category} (#{@words.size} word#{"s" if @words.size != 1})"
+%h1=h "#{@category} (#{@word_count} word#{"s" if @word_count != 1})"
 %p
-  %a{href: url("/download/#{h_uri(@category)}")} download
+  %a{href: url("/download/#{h_uri(@category)}.txt")} text
+  %a{href: url("/download/#{h_uri(@category)}.xml")} xml
+  %a{href: url("/download/#{h_uri(@category)}.json")} json
   %span.note
-    -if @words.empty?
+    -if @word_count == 0
       There doesn't seem to be any words. You should
       %a{href: url("/upload")} upload
       some words for this category.
     -else
       =word_threashold
       votes to add
--if @words.size > 0
+-if @word_count > 0
   %table
     %tr
       %th votes

@@ -16,7 +16,7 @@ class Object
   end
 end
 
-require_relative 'presenters/categories_presenter'
+require_relative 'presenters/category_presenter'
 
 class WordLists < Sinatra::Base
   helpers Sinatra::Cookies
@@ -72,7 +72,7 @@ class WordLists < Sinatra::Base
     input << params[:file][:tempfile].read if params[:file]
     input << params[:words] if params[:words]
 
-    if input.empty?
+    if input.strip.empty?
       @flash = :upload_empty
     else
 
@@ -149,14 +149,17 @@ class WordLists < Sinatra::Base
     @category = Category.first(:name => category_name)
     @page = params[:page].to_i
     @words = @category.words.all(:order => [:votes.desc, :name.asc]).pagify(:page => @page, :per_page => 50)
-    
+    @word_count = @category.words.count
+
     haml :word_list
   end
 
-  get '/download/:category_name' do |category_name|
-    @category = Category.first(:name => category_name)
+  [:txt, :xml, :json].each do |format|
+    get "/download/:category_name.#{format}" do |category_name|
+      @category = Category.first(:name => category_name)
 
-    content_type :text
-    CategoriesPresenter.new(Category).text
+      content_type format
+      CategoryPresenter.new(@category).send(format)
+    end
   end
 end

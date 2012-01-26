@@ -11,6 +11,10 @@ class Category
   include Voteable
   vote_threashold 20
 
+  def confirmed_words
+    words.confirmed.all(:order => [:name.asc])
+  end
+
   def add_word(name)
     word = self.words.first_or_new(:name => name)
     word.add_vote
