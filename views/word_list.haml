@@ -10,7 +10,9 @@
       some words for this category.
     -else
       =word_threashold
-      votes to add
+      votes to add. Vote by
+      %a{href: url("/upload?category=#{h_uri(@category)}")} uploading
+      the same words.
 -if @word_count > 0
   %table
     %tr
