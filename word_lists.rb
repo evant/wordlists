@@ -61,6 +61,7 @@ class WordLists < Sinatra::Base
 
   get '/upload' do
     @categories = Category.confirmed
+    @selected_category = params[:category]
 
     haml :upload
   end
@@ -92,6 +93,8 @@ class WordLists < Sinatra::Base
         @flash = :upload_error
       end
     end
+
+    @selected_category = params[:category]
 
     haml :upload
   end

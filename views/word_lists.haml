@@ -1,7 +1,8 @@
 %table{id: 'word-lists'}
   -@categories.each do |category|
+    - count = category.words.count
     %tr
-      %td=h category
+      %td=h "#{category} (#{count} word#{'s' if count != 1})"
       %td
         %a{href: url("/view/#{h_uri(category)}?page=1")} view
       %td

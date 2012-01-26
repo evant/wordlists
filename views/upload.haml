@@ -16,7 +16,7 @@
     %br
     %select{name: 'category'}
       -@categories.each do |category|
-        %option{value: category}=category
+        %option{value: category, selected: ('selected' if category.to_s == @selected_category)}=category
     %span.note
       Don't see the proper category? You can
       %a{href: url('/category_vote')} vote
