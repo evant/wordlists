@@ -10,7 +10,7 @@ class Word
   has n, :users, :through => Resource
 
   include Voteable
-  vote_threashold 5
+  vote_threashold 2
 
   def to_s
     name

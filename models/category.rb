@@ -9,7 +9,7 @@ class Category
   has n, :users, :through => Resource
 
   include Voteable
-  vote_threashold 20
+  vote_threashold 10
 
   def confirmed_words
     words.confirmed.all(:order => [:name.asc])
