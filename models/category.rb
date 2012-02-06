@@ -6,7 +6,7 @@ class Category
   property :name, String, :required => true
   
   has n, :words
-  has n, :users, :through => Resource
+  has n, :users, :through => Resource, :constraint => :destroy
 
   include Voteable
   vote_threashold 10

@@ -7,7 +7,7 @@ class Word
   property :name, String, :required => true
 
   belongs_to :category
-  has n, :users, :through => Resource
+  has n, :users, :through => Resource, :constraint => :destroy
 
   include Voteable
   vote_threashold 2
