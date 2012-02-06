@@ -1,4 +1,5 @@
 require 'data_mapper'
+require 'dm-constraints'
 
 module Database
   def self.set env
