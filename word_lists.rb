@@ -17,6 +17,7 @@ class Object
 end
 
 require_relative 'presenters/category_presenter'
+require_relative 'presenters/word_presenter'
 
 class WordLists < Sinatra::Base
   helpers Sinatra::Cookies
@@ -148,21 +149,31 @@ class WordLists < Sinatra::Base
     haml :word_lists
   end
 
-  get '/view/:category_name' do |category_name|
+  [:txt, :xml, :json].each do |format|
+    get "/.#{format}" do
+      @categories = Category.confirmed.all(:order => [:name.asc])
+
+      content_type format
+      CategoryPresenter.new(@categories).send(format)
+    end
+  end
+
+  [:txt, :xml, :json].each do |format|
+    get "/category/:category_name.#{format}" do |category_name|
+      @category = Category.first(:name => category_name)
+      @words = @category.confirmed_words
+
+      content_type format
+      WordPresenter.new(@words).send(format)
+    end
+  end
+
+  get '/category/:category_name' do |category_name|
     @category = Category.first(:name => category_name)
     @page = params[:page].to_i
     @words = @category.words.all(:order => [:votes.desc, :name.asc]).pagify(:page => @page, :per_page => 50)
     @word_count = @category.words.count
 
     haml :word_list
-  end
-
-  [:txt, :xml, :json].each do |format|
-    get "/download/:category_name.#{format}" do |category_name|
-      @category = Category.first(:name => category_name)
-
-      content_type format
-      CategoryPresenter.new(@category).send(format)
-    end
   end
 end

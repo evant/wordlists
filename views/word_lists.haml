@@ -4,10 +4,7 @@
     %tr
       %td=h "#{category} (#{count} word#{'s' if count != 1})"
       %td
-        %a{href: url("/view/#{h_uri(category)}?page=1")} view
-      %td
-        %a{href: url("/download/#{h_uri(category)}.txt")} text
-      %td
-        %a{href: url("/download/#{h_uri(category)}.xml")} xml
-      %td
-        %a{href: url("/download/#{h_uri(category)}.json")} json
+        %a{href: url("/category/#{h_uri(category)}?page=1")} view
+        - [:txt, :xml, :json].each do |format|
+          %td
+            %a{href: url("/category/#{h_uri(category)}.#{format}")}=format

@@ -1,8 +1,7 @@
 %h1=h "#{@category} (#{@word_count} word#{"s" if @word_count != 1})"
 %p
-  %a{href: url("/download/#{h_uri(@category)}.txt")} text
-  %a{href: url("/download/#{h_uri(@category)}.xml")} xml
-  %a{href: url("/download/#{h_uri(@category)}.json")} json
+  - [:txt, :xml, :json].each do |format|
+    %a{href: url("/category/#{h_uri(@category)}.#{format}")}=format
   %span.note
     -if @word_count == 0
       There doesn't seem to be any words. You should
